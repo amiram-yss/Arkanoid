@@ -1,7 +1,5 @@
 import biuoop.DrawSurface;
-import biuoop.GUI;
 import biuoop.KeyboardSensor;
-import biuoop.Sleeper;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -12,12 +10,12 @@ import java.util.List;
  * 314985474
  * Ass6
  */
-public class Game {
+public class Game implements Animation {
     /**
      * Consts.
      */
     private static final int SCREEN_WIDTH = 800;
-    private static final int SCREEN_HEIGHT = 600;
+    private static final int FPS = 60;
     private static final double BORDER_SHORT_EDGE = 20;
     private static final int NUM_BLOCK_LINES = 6;
     private static final int MAX_BLOCKS_IN_LINE = 12;
@@ -33,6 +31,7 @@ public class Game {
     private static final double BALL_1_ANGEL = -45;
     private static final double BALL_2_ANGEL = -15;
     private static final int WINNING_PRIZE = 100;
+
 
     /**
      * Environment getter.
@@ -82,6 +81,8 @@ public class Game {
     private BallRemover ballRemover;
     private ScoreTrackingListener scoreTrackingListener;
     private ScoreIndicator scoreIndicator;
+    private AnimationRunner runner;
+    private boolean running;
 
     /**
      * @return The keyboard sensor
@@ -117,13 +118,13 @@ public class Game {
                                         (SCREEN_WIDTH
                                                 - BORDER_SHORT_EDGE)
                                                 - (j + 1) * BLOCK_WIDTH,
-                                                (BORDER_SHORT_EDGE
+                                        (BORDER_SHORT_EDGE
                                                 * 5
                                                 + BORDER_SHORT_EDGE * i)
                                                 + BLOCK_HEIGHT),
-                                        BLOCK_WIDTH,
+                                BLOCK_WIDTH,
                                 BLOCK_HEIGHT),
-                                clrs[i]);
+                        clrs[i]);
                 //Add listeners.
                 bta.addHitListener(blockRemover);
                 bta.addHitListener(scoreTrackingListener);
@@ -162,6 +163,14 @@ public class Game {
     private void setCounters() {
         this.blocksCounter = new Counter();
         this.scoreCounter = new Counter();
+    }
+
+    /**
+     * Getter for runner.
+     * @return Runner.
+     */
+    public AnimationRunner getRunner() {
+        return this.runner;
     }
 
     /**
@@ -232,6 +241,16 @@ public class Game {
         setScoreCounterAndIndicator();
         //Set blocks
         setGameBlocks();
+        //Set animation handler.
+        setAnimationHandler();
+    }
+
+    /**
+     * Initializes the animation runner.
+     */
+    private void setAnimationHandler() {
+        this.runner = new AnimationRunner(FPS, null);
+        this.sensor = runner.getGui().getKeyboardSensor();
     }
 
     /**
@@ -248,49 +267,14 @@ public class Game {
      * Run the game -- start the animation loop.
      */
     public void run() {
-        //Inits vars for the method
-        Sleeper sleeper = new Sleeper();
-        GUI gui = new GUI("game", SCREEN_WIDTH, SCREEN_HEIGHT);
-        DrawSurface d = gui.getDrawSurface();
-        sensor = gui.getKeyboardSensor();
-
+        //Initializes bool representing level is ongoing.
+        this.running = true;
         //Insert paddle
         setPaddle(this);
-
-        //Video settings
-        int framesPerSecond = 60;
-        int millisecondsPerFrame = 1000 / framesPerSecond;
-
-        //Animation
-        while (true) {
-            //Handling equal timing
-            long startTime = System.currentTimeMillis();
-
-            //Paint all sprites on the surface
-            d = gui.getDrawSurface();
-            this.sprites.drawAllOn(d);
-            gui.show(d);
-            //And tell them time passed.
-            this.sprites.notifyAllTimePassed();
-
-            // timing
-            long usedTime = System.currentTimeMillis() - startTime;
-            long milliSecondLeftToSleep = millisecondsPerFrame - usedTime;
-            if (milliSecondLeftToSleep > 0) {
-                sleeper.sleepFor(milliSecondLeftToSleep);
-            }
-            if (blocksCounter.getValue() == BLOCKS_STARTING_NUMBER) {
-                // Win
-                this.scoreCounter.increase(WINNING_PRIZE);
-                gui.close();
-                return;
-            }
-            if (ballsCounter.getValue() == 0) {
-                // Lose
-                gui.close();
-                return;
-            }
-        }
+        // use our runner to run the current animation -- which is one turn of the game.
+        this.runner.run(this);
+        //Inits vars for the method
+        sensor = runner.getGui().getKeyboardSensor();
     }
 
     /**
@@ -326,6 +310,7 @@ public class Game {
 
     /**
      * Remove a ball from game.
+     *
      * @param hitter The ball to remove.
      */
     public void removeBall(Ball hitter) {
@@ -335,9 +320,45 @@ public class Game {
 
     /**
      * Remove a block from the game.
-     * @param beingHit  The block to remove.
+     *
+     * @param beingHit The block to remove.
      */
     private void removeBlock(Block beingHit) {
         beingHit.removeFromGame(this);
+    }
+
+    /**
+     * Put the current frame of an animation, on a surface.
+     *
+     * @param d The drawing surface to draw on.
+     */
+    @Override
+    public void doOneFrame(DrawSurface d) {
+        this.sprites.drawAllOn(d);
+        this.sprites.notifyAllTimePassed();
+//        sensor = gui.getKeyboardSensor();
+//        this.runner.getGui().getKeyboardSensor()
+        if (this.sensor.isPressed("p")) {
+            PauseScreen pauseScreen = new PauseScreen(this.sensor, this);
+            this.runner.run(pauseScreen);
+            this.runner.run(this);
+        }
+        if (blocksCounter.getValue() == BLOCKS_STARTING_NUMBER || ballsCounter.getValue() == 0) {
+            if(blocksCounter.getValue() == BLOCKS_STARTING_NUMBER) {
+                //Win
+                scoreCounter.increase(WINNING_PRIZE);
+            }
+            this.running = false;
+        }
+    }
+
+    /**
+     * Should abort the animation?
+     *
+     * @return True if should. False otherwise.
+     */
+    @Override
+    public boolean shouldStop() {
+        return !running;
     }
 }

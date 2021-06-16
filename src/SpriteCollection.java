@@ -43,9 +43,14 @@ public class SpriteCollection {
      * Notifies all time lapse has passed.
      */
     public void notifyAllTimePassed() {
+        int i = 0;
         List<Sprite> cpy = new ArrayList<>(sprites);
         for (Sprite s : cpy) {
+            if(i == 65)
+                UTIL.nop();
             s.timePassed();
+            //System.out.println(i);
+            i++;
         }
     }
 
