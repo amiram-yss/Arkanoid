@@ -10,7 +10,9 @@ import java.util.List;
  * 314985474
  * Ass6
  */
-public class Game implements Animation {
+public class GameLevel implements Animation {
+    private static final Point INIT_BALL_POINT = new Point(700,480);
+    LevelInformation levelInfo;
     /**
      * Consts.
      */
@@ -31,6 +33,10 @@ public class Game implements Animation {
     private static final double BALL_1_ANGEL = -45;
     private static final double BALL_2_ANGEL = -15;
     private static final int WINNING_PRIZE = 100;
+
+    public GameLevel(LevelInformation levelInformation) {
+        this.levelInfo = levelInformation;
+    }
 
 
     /**
@@ -105,33 +111,20 @@ public class Game implements Animation {
         };
     }
 
+    private void addBlock(Block bta) {
+        //Add listeners.
+        bta.addHitListener(blockRemover);
+        bta.addHitListener(scoreTrackingListener);
+        //Add to environments.
+        environment.addCollidable(bta);
+        sprites.addSprite(bta);
+    }
     /**
      * Arranges the game blocks.
      */
     private void setGameBlocks() {
-        Color[] clrs = linesColorsArray();
-        for (int i = 0; i < NUM_BLOCK_LINES; i++) {
-            for (int j = 0; j < MAX_BLOCKS_IN_LINE - i; j++) {
-                Block bta = new Block(
-                        new Rectangle(
-                                new Point(
-                                        (SCREEN_WIDTH
-                                                - BORDER_SHORT_EDGE)
-                                                - (j + 1) * BLOCK_WIDTH,
-                                        (BORDER_SHORT_EDGE
-                                                * 5
-                                                + BORDER_SHORT_EDGE * i)
-                                                + BLOCK_HEIGHT),
-                                BLOCK_WIDTH,
-                                BLOCK_HEIGHT),
-                        clrs[i]);
-                //Add listeners.
-                bta.addHitListener(blockRemover);
-                bta.addHitListener(scoreTrackingListener);
-                //Add to environments.
-                environment.addCollidable(bta);
-                sprites.addSprite(bta);
-            }
+        for(Block bta : levelInfo.blocks()) {
+            addBlock(bta);
         }
     }
 
@@ -193,31 +186,31 @@ public class Game implements Animation {
     }
 
     /**
+     * Adds a single ball to the game.
+     * @param b The ball.
+     */
+    private void addBall(Ball b) {
+        sprites.addSprite(b);
+        balls.add(b);
+    }
+
+    /**
      * Creates a balls array and sets them to the game.
      */
     private void setBalls() {
         balls = new ArrayList<>();
-        //Set first ball + speed.
-        Ball b1 = new Ball(
-                BALL_0_STARTING_POINT, BALL_RADIUS, Color.RED, environment);
-        b1.setVelocity(Velocity.fromAngleAndSpeed(BALL_0_ANGEL, BALL_SPEED));
-        //The second one.
-        Ball b2 = new Ball(
-                BALL_1_STARTING_POINT, BALL_RADIUS, Color.magenta, environment);
-        b2.setVelocity(Velocity.fromAngleAndSpeed(BALL_1_ANGEL, BALL_SPEED));
-        //And the third.
-        Ball b3 = new Ball(
-                BALL_2_STARTING_POINT, BALL_RADIUS, Color.BLUE, environment);
-        b3.setVelocity(Velocity.fromAngleAndSpeed(BALL_2_ANGEL, BALL_SPEED));
-        //Add them to sprite collections.
-        sprites.addSprite(b1);
-        sprites.addSprite(b2);
-        sprites.addSprite(b3);
-        //Add them to List balls.
-        balls.add(b1);
-        balls.add(b2);
-        balls.add(b3);
-        //Set counter.
+        Ball b;
+        List<Velocity> vs = levelInfo.initialBallVelocities();
+        for (Velocity v : vs) {
+            b = new Ball(
+                    INIT_BALL_POINT,
+                    BALL_RADIUS,
+                    Color.WHITE,
+                    this.environment
+            );
+            b.setVelocity(v);
+            addBall(b);
+        }
         ballsCounter = new Counter(balls.size());
     }
 
@@ -282,7 +275,7 @@ public class Game implements Animation {
      *
      * @param s this
      */
-    private void setPaddle(Game s) {
+    private void setPaddle(GameLevel s) {
         Paddle p = new Paddle();
         p.addToGame(this);
     }
@@ -334,6 +327,7 @@ public class Game implements Animation {
      */
     @Override
     public void doOneFrame(DrawSurface d) {
+        this.levelInfo.getBackground().drawOn(d);
         this.sprites.drawAllOn(d);
         this.sprites.notifyAllTimePassed();
 //        sensor = gui.getKeyboardSensor();
@@ -343,8 +337,8 @@ public class Game implements Animation {
             this.runner.run(pauseScreen);
             this.runner.run(this);
         }
-        if (blocksCounter.getValue() == BLOCKS_STARTING_NUMBER || ballsCounter.getValue() == 0) {
-            if(blocksCounter.getValue() == BLOCKS_STARTING_NUMBER) {
+        if (blocksCounter.getValue() == levelInfo.numberOfBlocksToRemove() || ballsCounter.getValue() == 0) {
+            if(blocksCounter.getValue() == levelInfo.numberOfBlocksToRemove()) {
                 //Win
                 scoreCounter.increase(WINNING_PRIZE);
             }

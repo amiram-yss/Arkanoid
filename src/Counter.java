@@ -44,6 +44,7 @@ public class Counter {
      */
     public void increase() {
         this.increase(DEFAULT_INCREASE_DECREASE_VALUE);
+        System.out.println(this.value);
     }
 
     /**

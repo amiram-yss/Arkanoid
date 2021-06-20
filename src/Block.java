@@ -202,7 +202,7 @@ public class Block implements Collidable, Sprite, HitNotifier {
      *
      * @param g The game.
      */
-    public void removeFromGame(Game g) {
+    public void removeFromGame(GameLevel g) {
         //Remove from sprites.
         g.getSprites().removeSprite(this);
         //Remove from collidables.

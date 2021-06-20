@@ -9,8 +9,8 @@ public class Ass6Game {
      * @param args  useless for this ass
      */
     public static void main(String[] args) {
-        Game game = new Game();
-        game.initialize();
-        game.run();
+        GameLevel gameLevel = new GameLevel(new Level1());
+        gameLevel.initialize();
+        gameLevel.run();
     }
 }

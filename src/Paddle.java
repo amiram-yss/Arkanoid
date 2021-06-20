@@ -155,7 +155,7 @@ public class Paddle implements Sprite, Collidable {
      *
      * @param g A game.
      */
-    public void addToGame(Game g) {
+    public void addToGame(GameLevel g) {
         g.addSprite(this);
         g.addCollidable(this);
         this.keyboardSensor = g.getSensor();

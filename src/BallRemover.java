@@ -6,16 +6,16 @@
 public class BallRemover implements HitListener {
 
     private Counter counter;
-    private Game game;
+    private GameLevel gameLevel;
 
     /**
      * Constructor.
-     * @param game      The game.
+     * @param gameLevel      The game.
      * @param counter   The game's counter.
      */
-    public BallRemover(Game game, Counter counter) {
+    public BallRemover(GameLevel gameLevel, Counter counter) {
         this.counter = counter;
-        this.game = game;
+        this.gameLevel = gameLevel;
     }
 
     /**
@@ -25,6 +25,6 @@ public class BallRemover implements HitListener {
      */
     @Override
     public void hitEvent(Block beingHit, Ball hitter) {
-        game.removeBall(hitter);
+        gameLevel.removeBall(hitter);
     }
 }
