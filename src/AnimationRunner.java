@@ -66,6 +66,13 @@ public class AnimationRunner {
                 this.sleeper.sleepFor(milliSecondLeftToSleep);
             }
         }
+        //gui.close();
+    }
+
+    /**
+     * Shuts animation and program down.
+     */
+    public void terminate() {
         gui.close();
     }
 }

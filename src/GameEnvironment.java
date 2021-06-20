@@ -253,7 +253,7 @@ public class GameEnvironment {
                 shortest = tmp;
                 cHolder = c;
             }
-            if (tmp.length() < shortest.length()) {
+            if (tmp.length() <= shortest.length()) {
                 shortest = tmp;
                 cHolder = c;
             }

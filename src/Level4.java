@@ -4,14 +4,22 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Level1 implements LevelInformation {
+public class Level4 implements LevelInformation {
     private static final int INIT_BALLS_NUM = 3;
     private static final int PADDLE_SPEED = 5;
     private static final int PADDLE_WIDTH = 100;
-    private static final String LEVEL_NAME = "The idiots' test";
-    private static final int INIT_BLOCKS_NUM = 1;
-    private static final double BALL_SPEED = 3;
-    private static final double BALL_ANGEL = 0;
+    private static final String LEVEL_NAME = "Gonna take awhile";
+    private static final int INIT_BLOCKS_NUM = 105;
+    private static final double BALL_0_ANGEL = 30;
+    private static final double BALL_1_ANGEL = 0;
+    private static final double BALL_2_ANGEL = -30;
+    private static final double BALL_SPEED = 5;
+    private static final int MAX_BLOCKS_IN_LINE = 15;
+    private static final int SCREEN_WIDTH = 800;
+    private static final int BORDER_SHORT_EDGE = 20;
+    private static final double BLOCK_HEIGHT = 30;
+    private static final double BLOCK_WIDTH = (float)(760 / 15);
+    private static final int NUM_BLOCK_LINES = 7;
 
     /**
      * Number of balls.
@@ -32,7 +40,9 @@ public class Level1 implements LevelInformation {
     @Override
     public List<Velocity> initialBallVelocities() {
         List<Velocity> ltr = new ArrayList<>();
-        ltr.add(Velocity.fromAngleAndSpeed(BALL_ANGEL, BALL_SPEED));
+        ltr.add(Velocity.fromAngleAndSpeed(BALL_0_ANGEL, BALL_SPEED));
+        ltr.add(Velocity.fromAngleAndSpeed(BALL_1_ANGEL, BALL_SPEED));
+        ltr.add(Velocity.fromAngleAndSpeed(BALL_2_ANGEL, BALL_SPEED));
         return ltr;
     }
 
@@ -72,14 +82,8 @@ public class Level1 implements LevelInformation {
         return new Sprite() {
             @Override
             public void drawOn(DrawSurface d) {
-                d.setColor(Color.BLACK);
-                d.fillRectangle(0,0,800,800);
-                d.setColor(Color.GREEN);
-                d.drawCircle(400, 150, 80);
-                d.drawCircle(400, 150, 100);
-                d.drawCircle(400, 150, 120);
-                d.drawLine(250,150,550,150);
-                d.drawLine(400,0,400,300);
+                d.setColor(new Color(23, 135, 207));
+                d.fillRectangle(0,0,SCREEN_WIDTH,SCREEN_WIDTH);
             }
 
             @Override
@@ -99,11 +103,24 @@ public class Level1 implements LevelInformation {
     public List<Block> blocks() {
         Block bta;
         List<Block> ltr = new ArrayList<>();
-        ltr.add(
-                new Block(
-                        new Rectangle(new Point(380,130),40,40),
-                        Color.RED
-        ));
+        for (int i = 0; i < NUM_BLOCK_LINES; i++) {
+            for (int j = 0; j < MAX_BLOCKS_IN_LINE; j++) {
+                bta = new Block(
+                        new Rectangle(
+                                new Point(
+                                        (SCREEN_WIDTH
+                                                - BORDER_SHORT_EDGE)
+                                                - (j + 1) * BLOCK_WIDTH,
+                                        (BLOCK_HEIGHT
+                                                * 5
+                                                + (BLOCK_HEIGHT + 1) * i)
+                                                + BLOCK_HEIGHT),
+                                BLOCK_WIDTH,
+                                BLOCK_HEIGHT),
+                        linesColorsArray()[i]);
+                ltr.add(bta);
+            }
+        }
         return ltr;
     }
 
@@ -129,8 +146,10 @@ public class Level1 implements LevelInformation {
                 Color.DARK_GRAY,
                 Color.RED,
                 Color.YELLOW,
-                Color.BLUE,
-                Color.WHITE
+                Color.GREEN,
+                Color.WHITE,
+                Color.PINK,
+                Color.CYAN
         };
     }
 

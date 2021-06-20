@@ -11,31 +11,38 @@ import java.util.List;
  * Ass6
  */
 public class GameLevel implements Animation {
-    private static final Point INIT_BALL_POINT = new Point(700,480);
+    private static final Point INIT_BALL_POINT = new Point(400, 450);
+    private static final Point TEST_CORNER_INIT_BALL_POINT = new Point(200, 380);
     LevelInformation levelInfo;
     /**
      * Consts.
      */
     private static final int SCREEN_WIDTH = 800;
     private static final int FPS = 60;
-    private static final double BORDER_SHORT_EDGE = 20;
-    private static final int NUM_BLOCK_LINES = 6;
-    private static final int MAX_BLOCKS_IN_LINE = 12;
-    private static final int BLOCK_WIDTH = 50;
-    private static final int BLOCK_HEIGHT = 20;
-    private static final int BALL_SPEED = 5; //TESTING 25
     private static final int BALL_RADIUS = 5;
-    private static final int BLOCKS_STARTING_NUMBER = 57;
-    private static final Point BALL_0_STARTING_POINT = new Point(350, 400);
-    private static final Point BALL_1_STARTING_POINT = new Point(250, 400);
-    private static final Point BALL_2_STARTING_POINT = new Point(300, 400);
-    private static final double BALL_0_ANGEL = -22.5;
-    private static final double BALL_1_ANGEL = -45;
-    private static final double BALL_2_ANGEL = -15;
     private static final int WINNING_PRIZE = 100;
 
+    private AnimationRunner animationRunner;
+
+    /**
+     * Constructor.
+     *
+     * @param levelInformation Contains data about level.
+     */
     public GameLevel(LevelInformation levelInformation) {
         this.levelInfo = levelInformation;
+    }
+
+    /**
+     * Constructor.
+     *  @param levelInformation Contains data about level.
+     * @param ar               The animation runner.
+     * @param sc                Scoring counter.
+     */
+    public GameLevel(LevelInformation levelInformation, AnimationRunner ar, Counter sc) {
+        this.levelInfo = levelInformation;
+        this.animationRunner = ar;
+        this.scoreCounter = sc;
     }
 
 
@@ -119,11 +126,12 @@ public class GameLevel implements Animation {
         environment.addCollidable(bta);
         sprites.addSprite(bta);
     }
+
     /**
      * Arranges the game blocks.
      */
     private void setGameBlocks() {
-        for(Block bta : levelInfo.blocks()) {
+        for (Block bta : levelInfo.blocks()) {
             addBlock(bta);
         }
     }
@@ -155,11 +163,11 @@ public class GameLevel implements Animation {
      */
     private void setCounters() {
         this.blocksCounter = new Counter();
-        this.scoreCounter = new Counter();
     }
 
     /**
      * Getter for runner.
+     *
      * @return Runner.
      */
     public AnimationRunner getRunner() {
@@ -187,6 +195,7 @@ public class GameLevel implements Animation {
 
     /**
      * Adds a single ball to the game.
+     *
      * @param b The ball.
      */
     private void addBall(Ball b) {
@@ -242,7 +251,7 @@ public class GameLevel implements Animation {
      * Initializes the animation runner.
      */
     private void setAnimationHandler() {
-        this.runner = new AnimationRunner(FPS, null);
+        this.runner = this.animationRunner;
         this.sensor = runner.getGui().getKeyboardSensor();
     }
 
@@ -263,20 +272,21 @@ public class GameLevel implements Animation {
         //Initializes bool representing level is ongoing.
         this.running = true;
         //Insert paddle
-        setPaddle(this);
-        // use our runner to run the current animation -- which is one turn of the game.
-        this.runner.run(this);
+        setPaddle(this, levelInfo.paddleWidth());
         //Inits vars for the method
         sensor = runner.getGui().getKeyboardSensor();
+        // use our runner to run the current animation -- which is one turn of the game.
+        this.runner.run(this);
     }
 
     /**
      * Set the paddle on the screen.
      *
-     * @param s this
+     * @param s     this
+     * @param width Paddle's width.
      */
-    private void setPaddle(GameLevel s) {
-        Paddle p = new Paddle();
+    private void setPaddle(GameLevel s, int width) {
+        Paddle p = new Paddle(width);
         p.addToGame(this);
     }
 
@@ -320,6 +330,14 @@ public class GameLevel implements Animation {
         beingHit.removeFromGame(this);
     }
 
+    public boolean hasBalls() {
+        return ballsCounter.getValue() != 0;
+    }
+
+    public boolean hasBlocks() {
+        return blocksCounter.getValue() != levelInfo.numberOfBlocksToRemove();
+    }
+
     /**
      * Put the current frame of an animation, on a surface.
      *
@@ -337,8 +355,8 @@ public class GameLevel implements Animation {
             this.runner.run(pauseScreen);
             this.runner.run(this);
         }
-        if (blocksCounter.getValue() == levelInfo.numberOfBlocksToRemove() || ballsCounter.getValue() == 0) {
-            if(blocksCounter.getValue() == levelInfo.numberOfBlocksToRemove()) {
+        if (!hasBlocks() || !hasBalls()) {
+            if (blocksCounter.getValue() == levelInfo.numberOfBlocksToRemove()) {
                 //Win
                 scoreCounter.increase(WINNING_PRIZE);
             }

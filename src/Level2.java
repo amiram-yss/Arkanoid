@@ -9,7 +9,8 @@ public class Level2 implements LevelInformation {
     private static final int PADDLE_SPEED = 5;
     private static final int PADDLE_WIDTH = 600;
     private static final String LEVEL_NAME = "Sunshininging";
-    private static final int INIT_BLOCKS_NUM = 1;
+    private static final int INIT_BLOCKS_NUM = 15;
+    private static final int BORDER_WIDTH = 20;
     private static final double BALL_0_ANGEL = -45;
     private static final double BALL_1_ANGEL = -30;
     private static final double BALL_2_ANGEL = -15;
@@ -18,7 +19,7 @@ public class Level2 implements LevelInformation {
     private static final int SCREEN_WIDTH = 800;
     private static final int BORDER_SHORT_EDGE = 20;
     private static final double BLOCK_HEIGHT = 30;
-    private static final double BLOCK_WIDTH = 60;
+    private static final double BLOCK_WIDTH = (760 / 15);
     private static final int NUM_BLOCK_LINES = 5;
 
     /**
@@ -41,7 +42,14 @@ public class Level2 implements LevelInformation {
     public List<Velocity> initialBallVelocities() {
         List<Velocity> ltr = new ArrayList<>();
         //ltr.add(Velocity.fromAngleAndSpeed(0, BALL_SPEED));
-        ltr.add(Velocity.fromAngleAndSpeed(135,2));
+        ltr.add(Velocity.fromAngleAndSpeed(10,5));
+        ltr.add(Velocity.fromAngleAndSpeed(20,5));
+        ltr.add(Velocity.fromAngleAndSpeed(30,5));
+        ltr.add(Velocity.fromAngleAndSpeed(40,5));
+        ltr.add(Velocity.fromAngleAndSpeed(-10,5));
+        ltr.add(Velocity.fromAngleAndSpeed(-20,5));
+        ltr.add(Velocity.fromAngleAndSpeed(-30,5));
+        ltr.add(Velocity.fromAngleAndSpeed(-40,5));
         return ltr;
     }
 
@@ -81,8 +89,7 @@ public class Level2 implements LevelInformation {
         return new Sprite() {
             @Override
             public void drawOn(DrawSurface d) {
-                d.setColor(Color.BLACK);
-                d.fillRectangle(0,0,800,800);
+
             }
 
             @Override
@@ -102,11 +109,18 @@ public class Level2 implements LevelInformation {
     public List<Block> blocks() {
         Block bta;
         List<Block> ltr = new ArrayList<>();
-        ltr.add(
-                new Block(
-                        new Rectangle(new Point(380,130),40,40),
-                        Color.RED
-        ));
+        for (int i = 1; i <= INIT_BLOCKS_NUM ; i++) {
+            ltr.add(
+                    new Block(
+                            new Rectangle(
+                                    new Point(
+                                            SCREEN_WIDTH - BORDER_WIDTH - (i * BLOCK_WIDTH),
+                                            180),
+                                    50,
+                                    30),
+                            blocksColorsArray()[i-1]
+                    ));
+        }
         return ltr;
     }
 
@@ -127,13 +141,23 @@ public class Level2 implements LevelInformation {
      * Return column colors in the order.
      * @return column colors in the order.
      */
-    private Color[] linesColorsArray() {
+    private Color[] blocksColorsArray() {
         return new Color[] {
-                Color.DARK_GRAY,
-                Color.RED,
-                Color.YELLOW,
+                Color.CYAN,
+                Color.CYAN,
+                Color.PINK,
+                Color.PINK,
                 Color.BLUE,
-                Color.WHITE
+                Color.BLUE,
+                Color.GREEN,
+                Color.GREEN,
+                Color.GREEN,
+                Color.YELLOW,
+                Color.YELLOW,
+                Color.ORANGE,
+                Color.ORANGE,
+                Color.RED,
+                Color.RED,
         };
     }
 

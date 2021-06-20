@@ -7,7 +7,7 @@ import java.util.List;
 public class Level3 implements LevelInformation {
     private static final int INIT_BALLS_NUM = 3;
     private static final int PADDLE_SPEED = 5;
-    private static final int PADDLE_WIDTH = 600;
+    private static final int PADDLE_WIDTH = 100;
     private static final String LEVEL_NAME = "Just like the good ol' times... (ass5)";
     private static final int INIT_BLOCKS_NUM = 40;
     private static final double BALL_0_ANGEL = -45;
@@ -83,7 +83,7 @@ public class Level3 implements LevelInformation {
         return new Sprite() {
             @Override
             public void drawOn(DrawSurface d) {
-                d.setColor(new Color(42, 129, 21));
+                d.setColor(new Color(57, 125, 122));
                 d.fillRectangle(0,0,800,800);
             }
 

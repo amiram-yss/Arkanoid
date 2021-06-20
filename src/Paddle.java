@@ -11,10 +11,9 @@ import java.awt.Color;
 public class Paddle implements Sprite, Collidable {
     private static final double SCREEN_WIDTH = 800;
     private static final double UPPER_LEFT_Y_VALUE = 560;
-    private static final double PADDLE_WIDTH = 100;
     private static final int PADDLE_PAINTED_HEIGHT = 20;
     private static final double PADDLE_ACTUAL_HEIGHT = 0.01;
-    private static final double STARTING_X_VALUE = 500;
+    private static final double STARTING_X_VALUE = 100;
     private static final double PADDLE_SPEED = 5;
     private static final double PADDLE_PARTS = 5;
     private static final double ANGEL = 30;
@@ -22,14 +21,24 @@ public class Paddle implements Sprite, Collidable {
 
     private KeyboardSensor keyboardSensor;
     private Rectangle rectangle;
+    private int paddleWidth;
 
     /**
      * Constructor.
      */
     public Paddle() {
+        this.paddleWidth = 100;
         rectangle = new Rectangle(
                 new Point(STARTING_X_VALUE, UPPER_LEFT_Y_VALUE),
-                PADDLE_WIDTH,
+                (SCREEN_WIDTH - paddleWidth) / 2,
+                PADDLE_ACTUAL_HEIGHT);
+    }
+
+    public Paddle(int width) {
+        this.paddleWidth = width;
+        rectangle = new Rectangle(
+                new Point((SCREEN_WIDTH - width) / 2, UPPER_LEFT_Y_VALUE),
+                width,
                 PADDLE_ACTUAL_HEIGHT);
     }
 
@@ -49,7 +58,7 @@ public class Paddle implements Sprite, Collidable {
      */
     public void moveRight() {
         if (this.rectangle.getUpperLeft().getX()
-                > SCREEN_WIDTH - PADDLE_PAINTED_HEIGHT - PADDLE_WIDTH - PADDLE_SPEED) {
+                > SCREEN_WIDTH - PADDLE_PAINTED_HEIGHT - paddleWidth - PADDLE_SPEED) {
             return;
         }
         this.rectangle.moveInXAxis(PADDLE_SPEED);
@@ -82,11 +91,11 @@ public class Paddle implements Sprite, Collidable {
                 - this.getCollisionRectangle().getUpperLeft().getX();
         double[] dots = new double[]{
                 0,
-                PADDLE_WIDTH / PADDLE_PARTS,
-                2 * (PADDLE_WIDTH / PADDLE_PARTS),
-                3 * (PADDLE_WIDTH / PADDLE_PARTS),
-                4 * (PADDLE_WIDTH / PADDLE_PARTS),
-                5 * (PADDLE_WIDTH / PADDLE_PARTS)
+                1 * (paddleWidth / PADDLE_PARTS),
+                2 * (paddleWidth / PADDLE_PARTS),
+                3 * (paddleWidth / PADDLE_PARTS),
+                4 * (paddleWidth / PADDLE_PARTS),
+                5 * (paddleWidth / PADDLE_PARTS)
         };
         if (UTIL.isBetweenOrEquals(x, dots[0], dots[1])) {
             return Velocity.fromAngleAndSpeed(-2 * ANGEL, BALL_SPEED);

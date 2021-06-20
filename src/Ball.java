@@ -104,6 +104,8 @@ public class Ball implements Sprite {
         //Set the color to the ball's color, and print it.
         surface.setColor(this.color);
         surface.fillCircle(this.getX(), this.getY(), this.radius);
+        surface.setColor(Color.BLACK);
+        surface.drawCircle(this.getX(), this.getY(), this.radius);
     }
 
     /**
@@ -314,7 +316,7 @@ public class Ball implements Sprite {
     public void moveOneStep() {
         //Check where it supposes to land.
         Point newLocation = this.velocity.applyToPoint(this.center);
-        //No collision puts the ball whithout any changes
+        //No collision puts the ball without any changes
         if (!isCollidingInTheNextMovement(newLocation)) {
             center = new Point(newLocation);
             return;
@@ -332,9 +334,11 @@ public class Ball implements Sprite {
         if (collisionInfo.collisionObject().getClass().equals(Paddle.class)) {
             this.velocity = (((Paddle) collisionInfo.collisionObject()).hit(
                     this, collisionInfo.collisionPoint(), velocity));
-            this.center = (((Paddle) (collisionInfo.collisionObject()))
+            Point tmp = (((Paddle) (collisionInfo.collisionObject()))
                     .hit(this, collisionInfo.collisionPoint(), velocity)
                     .applyToPoint(this.center));
+            if (!gameEnvironment.isPointInsideCollidable(tmp))
+                this.center = tmp;
             return;
         }
         /*
