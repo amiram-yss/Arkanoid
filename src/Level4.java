@@ -1,9 +1,14 @@
 import biuoop.DrawSurface;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Amiram Yassif
+ * 314985474
+ * ass6
+ */
 public class Level4 implements LevelInformation {
     private static final int INIT_BALLS_NUM = 3;
     private static final int PADDLE_SPEED = 5;
@@ -18,8 +23,9 @@ public class Level4 implements LevelInformation {
     private static final int SCREEN_WIDTH = 800;
     private static final int BORDER_SHORT_EDGE = 20;
     private static final double BLOCK_HEIGHT = 30;
-    private static final double BLOCK_WIDTH = (float)(760 / 15);
+    private static final double BLOCK_WIDTH = (float) (760 / 15);
     private static final int NUM_BLOCK_LINES = 7;
+    private static final double DELTA = 30;
 
     /**
      * Number of balls.
@@ -32,7 +38,7 @@ public class Level4 implements LevelInformation {
     }
 
     /**
-     * The initial velocity of each ball
+     * The initial velocity of each ball.
      * Note that initialBallVelocities().size() == numberOfBalls()
      *
      * @return List of all velocities.
@@ -73,7 +79,7 @@ public class Level4 implements LevelInformation {
     }
 
     /**
-     * Returns a sprite with the background of the level
+     * Returns a sprite with the background of the level.
      *
      * @return background sprite.
      */
@@ -83,7 +89,7 @@ public class Level4 implements LevelInformation {
             @Override
             public void drawOn(DrawSurface d) {
                 d.setColor(new Color(23, 135, 207));
-                d.fillRectangle(0,0,SCREEN_WIDTH,SCREEN_WIDTH);
+                d.fillRectangle(0, 0, SCREEN_WIDTH, SCREEN_WIDTH);
             }
 
             @Override
@@ -112,8 +118,8 @@ public class Level4 implements LevelInformation {
                                                 - BORDER_SHORT_EDGE)
                                                 - (j + 1) * BLOCK_WIDTH,
                                         (BLOCK_HEIGHT
-                                                * 5
-                                                + (BLOCK_HEIGHT + 1) * i)
+                                                + DELTA
+                                                + (BLOCK_HEIGHT) * i)
                                                 + BLOCK_HEIGHT),
                                 BLOCK_WIDTH,
                                 BLOCK_HEIGHT),
@@ -139,10 +145,11 @@ public class Level4 implements LevelInformation {
 
     /**
      * Return column colors in the order.
+     *
      * @return column colors in the order.
      */
     private Color[] linesColorsArray() {
-        return new Color[] {
+        return new Color[]{
                 Color.DARK_GRAY,
                 Color.RED,
                 Color.YELLOW,

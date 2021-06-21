@@ -34,6 +34,10 @@ public class Paddle implements Sprite, Collidable {
                 PADDLE_ACTUAL_HEIGHT);
     }
 
+    /**
+     * Constructor.
+     * @param width Paddle's width.
+     */
     public Paddle(int width) {
         this.paddleWidth = width;
         rectangle = new Rectangle(

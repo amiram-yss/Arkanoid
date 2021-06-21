@@ -14,7 +14,7 @@ public interface LevelInformation {
     int numberOfBalls();
 
     /**
-     * The initial velocity of each ball
+     * The initial velocity of each ball.
      * Note that initialBallVelocities().size() == numberOfBalls()
      *
      * @return List of all velocities.
@@ -39,7 +39,7 @@ public interface LevelInformation {
     String levelName();
 
     /**
-     * Returns a sprite with the background of the level
+     * Returns a sprite with the background of the level.
      *
      * @return background sprite.
      */

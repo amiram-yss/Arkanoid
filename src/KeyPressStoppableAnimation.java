@@ -1,11 +1,18 @@
 import biuoop.DrawSurface;
 import biuoop.KeyboardSensor;
 
+/**
+ * @author Amiram Yassif
+ * 314985474
+ * ass6
+ */
 public class KeyPressStoppableAnimation implements Animation {
 
-    final Animation content;
-    final String key;
-    final KeyboardSensor keyboardSensor;
+    private final Animation content;
+    private final String key;
+    private final KeyboardSensor keyboardSensor;
+    private boolean running;
+    private boolean isAlreadyPressed;
     /**
      * Constructor.
      * @param sensor Keyboard sensor.
@@ -16,6 +23,8 @@ public class KeyPressStoppableAnimation implements Animation {
         this.content = animation;
         this.key = k;
         this.keyboardSensor = sensor;
+        running = true;
+        isAlreadyPressed = true;
     }
 
     /**
@@ -25,7 +34,15 @@ public class KeyPressStoppableAnimation implements Animation {
      */
     @Override
     public void doOneFrame(DrawSurface d) {
+        if (!this.keyboardSensor.isPressed(key)) {
+            isAlreadyPressed = false;
+        }
+        if (this.keyboardSensor.isPressed(KeyboardSensor.SPACE_KEY)
+                && !isAlreadyPressed) {
+            this.running = false;
+        }
         content.doOneFrame(d);
+
     }
 
     /**
@@ -35,6 +52,6 @@ public class KeyPressStoppableAnimation implements Animation {
      */
     @Override
     public boolean shouldStop() {
-        return false;
+        return !running;
     }
 }

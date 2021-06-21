@@ -1,9 +1,14 @@
 import biuoop.DrawSurface;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Amiram Yassif
+ * 314985474
+ * ass6
+ */
 public class Level1 implements LevelInformation {
     private static final int INIT_BALLS_NUM = 3;
     private static final int PADDLE_SPEED = 5;
@@ -24,7 +29,7 @@ public class Level1 implements LevelInformation {
     }
 
     /**
-     * The initial velocity of each ball
+     * The initial velocity of each ball.
      * Note that initialBallVelocities().size() == numberOfBalls()
      *
      * @return List of all velocities.
@@ -63,7 +68,7 @@ public class Level1 implements LevelInformation {
     }
 
     /**
-     * Returns a sprite with the background of the level
+     * Returns a sprite with the background of the level.
      *
      * @return background sprite.
      */
@@ -73,13 +78,13 @@ public class Level1 implements LevelInformation {
             @Override
             public void drawOn(DrawSurface d) {
                 d.setColor(Color.BLACK);
-                d.fillRectangle(0,0,800,800);
+                d.fillRectangle(0, 0, 800, 800);
                 d.setColor(Color.GREEN);
                 d.drawCircle(400, 150, 80);
                 d.drawCircle(400, 150, 100);
                 d.drawCircle(400, 150, 120);
-                d.drawLine(250,150,550,150);
-                d.drawLine(400,0,400,300);
+                d.drawLine(250, 150, 550, 150);
+                d.drawLine(400, 0, 400, 300);
             }
 
             @Override
@@ -101,9 +106,9 @@ public class Level1 implements LevelInformation {
         List<Block> ltr = new ArrayList<>();
         ltr.add(
                 new Block(
-                        new Rectangle(new Point(380,130),40,40),
+                        new Rectangle(new Point(380, 130), 40, 40),
                         Color.RED
-        ));
+                ));
         return ltr;
     }
 
@@ -122,10 +127,11 @@ public class Level1 implements LevelInformation {
 
     /**
      * Return column colors in the order.
+     *
      * @return column colors in the order.
      */
     private Color[] linesColorsArray() {
-        return new Color[] {
+        return new Color[]{
                 Color.DARK_GRAY,
                 Color.RED,
                 Color.YELLOW,

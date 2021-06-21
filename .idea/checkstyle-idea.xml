@@ -7,7 +7,7 @@
         <entry key="copy-libs" value="true" />
         <entry key="location-0" value="BUNDLED:(bundled):Sun Checks" />
         <entry key="location-1" value="BUNDLED:(bundled):Google Checks" />
-        <entry key="location-2" value="LOCAL_FILE:C:/Users/amira/Desktop/biuoop.xml:BIU" />
+        <entry key="location-2" value="HTTP_URL:https://raw.githubusercontent.com/wiki/ariecattan/biuoop2021/data/checkstyle/biuoop.xml:BIU" />
         <entry key="scan-before-checkin" value="false" />
         <entry key="scanscope" value="Everything" />
         <entry key="suppress-errors" value="false" />

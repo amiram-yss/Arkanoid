@@ -337,8 +337,9 @@ public class Ball implements Sprite {
             Point tmp = (((Paddle) (collisionInfo.collisionObject()))
                     .hit(this, collisionInfo.collisionPoint(), velocity)
                     .applyToPoint(this.center));
-            if (!gameEnvironment.isPointInsideCollidable(tmp))
+            if (!gameEnvironment.isPointInsideCollidable(tmp)) {
                 this.center = tmp;
+            }
             return;
         }
         /*

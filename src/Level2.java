@@ -1,9 +1,14 @@
 import biuoop.DrawSurface;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Amiram Yassif
+ * 314985474
+ * ass6
+ */
 public class Level2 implements LevelInformation {
     private static final int INIT_BALLS_NUM = 3;
     private static final int PADDLE_SPEED = 5;
@@ -11,16 +16,8 @@ public class Level2 implements LevelInformation {
     private static final String LEVEL_NAME = "Sunshininging";
     private static final int INIT_BLOCKS_NUM = 15;
     private static final int BORDER_WIDTH = 20;
-    private static final double BALL_0_ANGEL = -45;
-    private static final double BALL_1_ANGEL = -30;
-    private static final double BALL_2_ANGEL = -15;
-    private static final double BALL_SPEED = 5;
-    private static final int MAX_BLOCKS_IN_LINE = 10;
     private static final int SCREEN_WIDTH = 800;
-    private static final int BORDER_SHORT_EDGE = 20;
-    private static final double BLOCK_HEIGHT = 30;
-    private static final double BLOCK_WIDTH = (760 / 15);
-    private static final int NUM_BLOCK_LINES = 5;
+    private static final double BLOCK_WIDTH = (float) (760 / 15);
 
     /**
      * Number of balls.
@@ -33,7 +30,7 @@ public class Level2 implements LevelInformation {
     }
 
     /**
-     * The initial velocity of each ball
+     * The initial velocity of each ball.
      * Note that initialBallVelocities().size() == numberOfBalls()
      *
      * @return List of all velocities.
@@ -42,14 +39,14 @@ public class Level2 implements LevelInformation {
     public List<Velocity> initialBallVelocities() {
         List<Velocity> ltr = new ArrayList<>();
         //ltr.add(Velocity.fromAngleAndSpeed(0, BALL_SPEED));
-        ltr.add(Velocity.fromAngleAndSpeed(10,5));
-        ltr.add(Velocity.fromAngleAndSpeed(20,5));
-        ltr.add(Velocity.fromAngleAndSpeed(30,5));
-        ltr.add(Velocity.fromAngleAndSpeed(40,5));
-        ltr.add(Velocity.fromAngleAndSpeed(-10,5));
-        ltr.add(Velocity.fromAngleAndSpeed(-20,5));
-        ltr.add(Velocity.fromAngleAndSpeed(-30,5));
-        ltr.add(Velocity.fromAngleAndSpeed(-40,5));
+        ltr.add(Velocity.fromAngleAndSpeed(10, 5));
+        ltr.add(Velocity.fromAngleAndSpeed(20, 5));
+        ltr.add(Velocity.fromAngleAndSpeed(30, 5));
+        ltr.add(Velocity.fromAngleAndSpeed(40, 5));
+        ltr.add(Velocity.fromAngleAndSpeed(-10, 5));
+        ltr.add(Velocity.fromAngleAndSpeed(-20, 5));
+        ltr.add(Velocity.fromAngleAndSpeed(-30, 5));
+        ltr.add(Velocity.fromAngleAndSpeed(-40, 5));
         return ltr;
     }
 
@@ -80,7 +77,7 @@ public class Level2 implements LevelInformation {
     }
 
     /**
-     * Returns a sprite with the background of the level
+     * Returns a sprite with the background of the level.
      *
      * @return background sprite.
      */
@@ -91,14 +88,14 @@ public class Level2 implements LevelInformation {
             public void drawOn(DrawSurface d) {
                 Point ctr = new Point(100, 100);
                 d.setColor(Color.ORANGE);
-                for(int i = 0; i < 50; i++) {
-                    d.drawLine((int)ctr.getX(), (int)ctr.getY(), BORDER_WIDTH + (760 / 50) * i, 180);
+                for (int i = 0; i < 50; i++) {
+                    d.drawLine((int) ctr.getX(), (int) ctr.getY(), BORDER_WIDTH + (760 / 50) * i, 180);
                 }
-                d.fillCircle((int)ctr.getX(),(int)ctr.getY(),80);
+                d.fillCircle((int) ctr.getX(), (int) ctr.getY(), 80);
                 d.setColor(Color.YELLOW);
-                d.fillCircle((int)ctr.getX(),(int)ctr.getY(),70);
+                d.fillCircle((int) ctr.getX(), (int) ctr.getY(), 70);
                 d.setColor(new Color(253, 223, 24));
-                d.fillCircle((int)ctr.getX(),(int)ctr.getY(),60);
+                d.fillCircle((int) ctr.getX(), (int) ctr.getY(), 60);
             }
 
             @Override
@@ -118,7 +115,7 @@ public class Level2 implements LevelInformation {
     public List<Block> blocks() {
         Block bta;
         List<Block> ltr = new ArrayList<>();
-        for (int i = 1; i <= INIT_BLOCKS_NUM ; i++) {
+        for (int i = 1; i <= INIT_BLOCKS_NUM; i++) {
             ltr.add(
                     new Block(
                             new Rectangle(
@@ -127,7 +124,7 @@ public class Level2 implements LevelInformation {
                                             180),
                                     50,
                                     30),
-                            blocksColorsArray()[i-1]
+                            blocksColorsArray()[i - 1]
                     ));
         }
         return ltr;
@@ -148,10 +145,11 @@ public class Level2 implements LevelInformation {
 
     /**
      * Return column colors in the order.
+     *
      * @return column colors in the order.
      */
     private Color[] blocksColorsArray() {
-        return new Color[] {
+        return new Color[]{
                 Color.CYAN,
                 Color.CYAN,
                 Color.PINK,

@@ -27,12 +27,11 @@ public class GameLevel implements Animation {
     private boolean running;
     private static final Point INIT_BALL_POINT = new Point(400, 450);
     private static final Point TEST_CORNER_INIT_BALL_POINT = new Point(200, 380);
-    LevelInformation levelInfo;
+    private final LevelInformation levelInfo;
+    private DrawSurface lastFrame;
     /**
      * Consts.
      */
-    private static final int SCREEN_WIDTH = 800;
-    private static final int FPS = 60;
     private static final int BALL_RADIUS = 5;
     private static final int WINNING_PRIZE = 100;
 
@@ -49,9 +48,10 @@ public class GameLevel implements Animation {
 
     /**
      * Constructor.
-     *  @param levelInformation Contains data about level.
+     *
+     * @param levelInformation Contains data about level.
      * @param ar               The animation runner.
-     * @param sc                Scoring counter.
+     * @param sc               Scoring counter.
      */
     public GameLevel(LevelInformation levelInformation, AnimationRunner ar, Counter sc) {
         this.levelInfo = levelInformation;
@@ -97,7 +97,6 @@ public class GameLevel implements Animation {
     }
 
 
-
     /**
      * @return The keyboard sensor
      */
@@ -119,6 +118,10 @@ public class GameLevel implements Animation {
         };
     }
 
+    /**
+     * Adds a block to the game.
+     * @param bta The block.
+     */
     private void addBlock(Block bta) {
         //Add listeners.
         bta.addHitListener(blockRemover);
@@ -261,7 +264,7 @@ public class GameLevel implements Animation {
     private void setScoreCounterAndIndicator() {
         this.scoreTrackingListener = new ScoreTrackingListener(
                 this.scoreCounter);
-        this.scoreIndicator = new ScoreIndicator(scoreCounter);
+        this.scoreIndicator = new ScoreIndicator(scoreCounter, levelInfo.levelName());
         this.addSprite(scoreIndicator);
     }
 
@@ -330,10 +333,18 @@ public class GameLevel implements Animation {
         beingHit.removeFromGame(this);
     }
 
+    /**
+     * Does level has any ball remaining?
+     * @return True if yes (meaning player hasn't lost yet).
+     */
     public boolean hasBalls() {
         return ballsCounter.getValue() != 0;
     }
 
+    /**
+     * Does level has any blocks remaining?
+     * @return true if yes (meaning player hasn't won yet).
+     */
     public boolean hasBlocks() {
         return blocksCounter.getValue() != levelInfo.numberOfBlocksToRemove();
     }
@@ -346,20 +357,26 @@ public class GameLevel implements Animation {
     @Override
     public void doOneFrame(DrawSurface d) {
         this.levelInfo.getBackground().drawOn(d);
+        lastFrame = d;
         this.sprites.drawAllOn(d);
         this.sprites.notifyAllTimePassed();
-//        if (this.sensor.isPressed("p")) {
+        if (this.sensor.isPressed("p")) {
 //            PauseScreen pauseScreen = new PauseScreen(this.sensor, this);
-//            this.runner.run(pauseScreen);
-//            this.runner.run(this);
-//        }
+            KeyPressStoppableAnimation pauseScreen = new KeyPressStoppableAnimation(
+                    sensor,
+                    "p",
+                    new PauseScreen(sensor)
+            );
+            this.runner.run(pauseScreen);
+            this.runner.run(this);
+        }
         if (!hasBlocks() || !hasBalls()) {
-            if (blocksCounter.getValue() == levelInfo.numberOfBlocksToRemove()) {
-                //Win
-                scoreCounter.increase(WINNING_PRIZE);
-            }
             this.running = false;
         }
+    }
+
+    public DrawSurface getLastFrame() {
+        return this.lastFrame;
     }
 
     /**

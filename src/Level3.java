@@ -1,9 +1,14 @@
 import biuoop.DrawSurface;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Amiram Yassif
+ * 314985474
+ * ass6
+ */
 public class Level3 implements LevelInformation {
     private static final int INIT_BALLS_NUM = 3;
     private static final int PADDLE_SPEED = 5;
@@ -33,7 +38,7 @@ public class Level3 implements LevelInformation {
     }
 
     /**
-     * The initial velocity of each ball
+     * The initial velocity of each ball.
      * Note that initialBallVelocities().size() == numberOfBalls()
      *
      * @return List of all velocities.
@@ -74,7 +79,7 @@ public class Level3 implements LevelInformation {
     }
 
     /**
-     * Returns a sprite with the background of the level
+     * Returns a sprite with the background of the level.
      *
      * @return background sprite.
      */
@@ -83,8 +88,52 @@ public class Level3 implements LevelInformation {
         return new Sprite() {
             @Override
             public void drawOn(DrawSurface d) {
-                d.setColor(new Color(57, 125, 122));
-                d.fillRectangle(0,0,800,800);
+                d.setColor(new Color(42, 128, 21));
+                d.fillRectangle(0, 0, 800, 800);
+                d.setColor(new Color(128, 128, 128));
+                d.fillRectangle(100, 300, 5, 300);
+                d.setColor(new Color(62, 58, 57));
+                d.fillRectangle(85, 400, 35, 300);
+                d.setColor(Color.DARK_GRAY);
+                d.fillRectangle(65, 450, 75, 200);
+                d.setColor(new Color(180, 255, 240));
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 5; j++) {
+                        d.fillRectangle(
+                                70 + 17 * i,
+                                460 + 25 * j,
+                                14,
+                                21);
+                    }
+                }
+                Point beaconCenter = new Point(102, 300);
+                d.setColor(Color.WHITE);
+                for (int i = 0; i < 18; i++) {
+                    d.drawLine(
+                            (int) beaconCenter.getX(),
+                            (int) beaconCenter.getY(),
+                            (int) Velocity.fromAngleAndSpeed(20 * i, 20).applyToPoint(beaconCenter).getX(),
+                            (int) Velocity.fromAngleAndSpeed(20 * i, 20).applyToPoint(beaconCenter).getY()
+                    );
+                }
+                d.setColor(Color.YELLOW);
+                d.fillCircle(
+                        (int) beaconCenter.getX(),
+                        (int) beaconCenter.getY(),
+                        9
+                );
+                d.setColor(Color.RED);
+                d.fillCircle(
+                        (int) beaconCenter.getX(),
+                        (int) beaconCenter.getY(),
+                        7
+                );
+                d.setColor(Color.WHITE);
+                d.fillCircle(
+                        (int) beaconCenter.getX(),
+                        (int) beaconCenter.getY(),
+                        5
+                );
             }
 
             @Override
@@ -140,10 +189,11 @@ public class Level3 implements LevelInformation {
 
     /**
      * Return column colors in the order.
+     *
      * @return column colors in the order.
      */
     private Color[] linesColorsArray() {
-        return new Color[] {
+        return new Color[]{
                 Color.DARK_GRAY,
                 Color.RED,
                 Color.YELLOW,

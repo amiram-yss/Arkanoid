@@ -10,7 +10,8 @@ public class BallRemover implements HitListener {
 
     /**
      * Constructor.
-     * @param gameLevel      The game.
+     *
+     * @param gameLevel The game.
      * @param counter   The game's counter.
      */
     public BallRemover(GameLevel gameLevel, Counter counter) {
@@ -20,8 +21,9 @@ public class BallRemover implements HitListener {
 
     /**
      * Event when ball hits a block.
-     * @param beingHit  The block.
-     * @param hitter    The ball.
+     *
+     * @param beingHit The block.
+     * @param hitter   The ball.
      */
     @Override
     public void hitEvent(Block beingHit, Ball hitter) {

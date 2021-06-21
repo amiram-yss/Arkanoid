@@ -1,10 +1,15 @@
 import biuoop.DrawSurface;
 import biuoop.KeyboardSensor;
 
+/**
+ * @author Amiram Yassif
+ * 314985474
+ * ass6
+ */
 public class PauseScreen implements Animation {
     private final KeyboardSensor keyboard;
     private GameLevel caller;
-    private boolean stop;
+//    private boolean stop;
 
     /**
      * Constructor.
@@ -12,18 +17,7 @@ public class PauseScreen implements Animation {
      */
     public PauseScreen(KeyboardSensor k) {
         this.keyboard = k;
-        this.stop = false;
-    }
-
-    /**
-     * Constructor.
-     * @param k Keyboard sensor.
-     * @param callerRef The animation called this.
-     */
-    public PauseScreen(KeyboardSensor k, GameLevel callerRef) {
-        this.keyboard = k;
-        this.stop = false;
-        this.caller = callerRef;
+//        this.stop = false;
     }
     /**
      * Put the current frame of an animation, on a surface.
@@ -33,10 +27,6 @@ public class PauseScreen implements Animation {
     @Override
     public void doOneFrame(DrawSurface d) {
         d.drawText(10, d.getHeight() / 2, "paused -- press space to continue", 32);
-        if (this.keyboard.isPressed(KeyboardSensor.SPACE_KEY)) {
-            this.stop = true;
-            caller.getRunner().run(caller);
-        }
     }
 
     /**
@@ -46,10 +36,7 @@ public class PauseScreen implements Animation {
      */
     @Override
     public boolean shouldStop()  {
-        return this.stop;
-    }
-
-    public void setCaller(GameLevel callerRef) {
-        this.caller = callerRef;
+//        return this.stop;
+        return true;
     }
 }
