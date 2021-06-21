@@ -15,9 +15,9 @@ public class Level3 implements LevelInformation {
     private static final int PADDLE_WIDTH = 100;
     private static final String LEVEL_NAME = "Just like the good ol' times... (ass5)";
     private static final int INIT_BLOCKS_NUM = 40;
-    private static final double BALL_0_ANGEL = -45;
-    private static final double BALL_1_ANGEL = -30;
-    private static final double BALL_2_ANGEL = -15;
+    private static final double BALL_0_ANGEL = 30;
+    private static final double BALL_1_ANGEL = 0;
+    private static final double BALL_2_ANGEL = -30;
     private static final double BALL_SPEED = 5;
     private static final int MAX_BLOCKS_IN_LINE = 10;
     private static final int SCREEN_WIDTH = 800;
