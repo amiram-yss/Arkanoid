@@ -3,8 +3,17 @@ import biuoop.KeyboardSensor;
 
 public class PauseScreen implements Animation {
     private final KeyboardSensor keyboard;
-    private final GameLevel caller;
+    private GameLevel caller;
     private boolean stop;
+
+    /**
+     * Constructor.
+     * @param k Keyboard sensor.
+     */
+    public PauseScreen(KeyboardSensor k) {
+        this.keyboard = k;
+        this.stop = false;
+    }
 
     /**
      * Constructor.
@@ -36,7 +45,11 @@ public class PauseScreen implements Animation {
      * @return True if should. False otherwise.
      */
     @Override
-    public boolean shouldStop() {
+    public boolean shouldStop()  {
         return this.stop;
+    }
+
+    public void setCaller(GameLevel callerRef) {
+        this.caller = callerRef;
     }
 }

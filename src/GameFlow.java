@@ -5,6 +5,7 @@ import java.util.List;
 
 public class GameFlow {
     private AnimationRunner animationRunner;
+    KeyPressStoppableAnimation pauseScreen;
     private List<LevelInformation> levels;
     Counter scoreCounter;
 
@@ -15,6 +16,10 @@ public class GameFlow {
     public GameFlow(AnimationRunner ar) {
         this.animationRunner = ar;
         scoreCounter = new Counter();
+        pauseScreen = new KeyPressStoppableAnimation(
+                ar.getGui().getKeyboardSensor(),
+                "p",
+                new PauseScreen(ar.getGui().getKeyboardSensor()));
     }
 
     public void runLevels(List<LevelInformation> levels) {

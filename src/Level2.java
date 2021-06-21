@@ -89,7 +89,16 @@ public class Level2 implements LevelInformation {
         return new Sprite() {
             @Override
             public void drawOn(DrawSurface d) {
-
+                Point ctr = new Point(100, 100);
+                d.setColor(Color.ORANGE);
+                for(int i = 0; i < 50; i++) {
+                    d.drawLine((int)ctr.getX(), (int)ctr.getY(), BORDER_WIDTH + (760 / 50) * i, 180);
+                }
+                d.fillCircle((int)ctr.getX(),(int)ctr.getY(),80);
+                d.setColor(Color.YELLOW);
+                d.fillCircle((int)ctr.getX(),(int)ctr.getY(),70);
+                d.setColor(new Color(253, 223, 24));
+                d.fillCircle((int)ctr.getX(),(int)ctr.getY(),60);
             }
 
             @Override

@@ -11,6 +11,20 @@ import java.util.List;
  * Ass6
  */
 public class GameLevel implements Animation {
+    /**
+     * Properties.
+     */
+    private SpriteCollection sprites;
+    private GameEnvironment environment;
+    private List<Ball> balls;
+    private KeyboardSensor sensor;
+    private Counter blocksCounter, ballsCounter, scoreCounter;
+    private BlockRemover blockRemover;
+    private BallRemover ballRemover;
+    private ScoreTrackingListener scoreTrackingListener;
+    private ScoreIndicator scoreIndicator;
+    private AnimationRunner runner;
+    private boolean running;
     private static final Point INIT_BALL_POINT = new Point(400, 450);
     private static final Point TEST_CORNER_INIT_BALL_POINT = new Point(200, 380);
     LevelInformation levelInfo;
@@ -22,7 +36,7 @@ public class GameLevel implements Animation {
     private static final int BALL_RADIUS = 5;
     private static final int WINNING_PRIZE = 100;
 
-    private AnimationRunner animationRunner;
+    //private AnimationRunner animationRunner;
 
     /**
      * Constructor.
@@ -41,7 +55,7 @@ public class GameLevel implements Animation {
      */
     public GameLevel(LevelInformation levelInformation, AnimationRunner ar, Counter sc) {
         this.levelInfo = levelInformation;
-        this.animationRunner = ar;
+        this.runner = ar;
         this.scoreCounter = sc;
     }
 
@@ -82,20 +96,7 @@ public class GameLevel implements Animation {
         this.sprites = sp;
     }
 
-    /**
-     * Properties.
-     */
-    private SpriteCollection sprites;
-    private GameEnvironment environment;
-    private List<Ball> balls;
-    private KeyboardSensor sensor;
-    private Counter blocksCounter, ballsCounter, scoreCounter;
-    private BlockRemover blockRemover;
-    private BallRemover ballRemover;
-    private ScoreTrackingListener scoreTrackingListener;
-    private ScoreIndicator scoreIndicator;
-    private AnimationRunner runner;
-    private boolean running;
+
 
     /**
      * @return The keyboard sensor
@@ -251,7 +252,6 @@ public class GameLevel implements Animation {
      * Initializes the animation runner.
      */
     private void setAnimationHandler() {
-        this.runner = this.animationRunner;
         this.sensor = runner.getGui().getKeyboardSensor();
     }
 
@@ -348,13 +348,11 @@ public class GameLevel implements Animation {
         this.levelInfo.getBackground().drawOn(d);
         this.sprites.drawAllOn(d);
         this.sprites.notifyAllTimePassed();
-//        sensor = gui.getKeyboardSensor();
-//        this.runner.getGui().getKeyboardSensor()
-        if (this.sensor.isPressed("p")) {
-            PauseScreen pauseScreen = new PauseScreen(this.sensor, this);
-            this.runner.run(pauseScreen);
-            this.runner.run(this);
-        }
+//        if (this.sensor.isPressed("p")) {
+//            PauseScreen pauseScreen = new PauseScreen(this.sensor, this);
+//            this.runner.run(pauseScreen);
+//            this.runner.run(this);
+//        }
         if (!hasBlocks() || !hasBalls()) {
             if (blocksCounter.getValue() == levelInfo.numberOfBlocksToRemove()) {
                 //Win
