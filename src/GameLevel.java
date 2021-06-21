@@ -375,9 +375,6 @@ public class GameLevel implements Animation {
         }
     }
 
-    public DrawSurface getLastFrame() {
-        return this.lastFrame;
-    }
 
     /**
      * Should abort the animation?
